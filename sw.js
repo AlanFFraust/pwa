@@ -15,7 +15,7 @@ recursos_Dinamicos = [];
 self.addEventListener('install', event => {
     event.waitUntil((async () => {
         const cache1 = await caches.open(CACHE_NAME);
-        cache1.addAll(recursos_Staticos);
+        cache1.addAll(urlsToCache);
 
         const cache2 = await caches.open(NOMBRE_CACHE_DINAMICA);
         cache2.addAll(recursos_Dinamicos);
@@ -27,7 +27,7 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
     event.respondWith((async () => {
 
-        const cache1 = await caches.open(NOMBRE_CACHE_STATICA);  //Abre cache Estatica
+        const cache1 = await caches.open(CACHE_NAME);  //Abre cache Estatica
         const cache2 = await caches.open(NOMBRE_CACHE_DINAMICA);  //Abre cache Dinamico
 
 
