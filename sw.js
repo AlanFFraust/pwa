@@ -14,7 +14,7 @@ recursos_Dinamicos = [];
 // Utilice el evento de instalación para almacenar en caché previamente todos los recursos iniciales.
 self.addEventListener('install', event => {
     event.waitUntil((async () => {
-        const cache1 = await caches.open(NOMBRE_CACHE_STATICA);
+        const cache1 = await caches.open(CACHE_NAME);
         cache1.addAll(recursos_Staticos);
 
         const cache2 = await caches.open(NOMBRE_CACHE_DINAMICA);
