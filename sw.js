@@ -1,5 +1,5 @@
 const CACHE_NAME = 'conversor-currency-v1';
-const urlsToCache = [
+urlsToCache = [
     '/',
     './index.html',
     './manifest.json',
