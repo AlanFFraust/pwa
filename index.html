@@ -3,35 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="https://cdn.icon-icons.com/icons2/618/PNG/512/Currency_Conversion_icon-icons.com_56682.png">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="manifest" href="./manifest.json">
     <title>Conversor de Monedas</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin: 20px;
-      }
-
-      input {
-        padding: 10px;
-        margin: 10px;
-        width: 200px;
-        text-align: right;
-      }
-
-      button {
-        padding: 10px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      #result {
-        font-size: 1.5em;
-        margin-top: 20px;
-      }
-    </style>
   </head>
   <body>
     <h1>Conversor de Monedas</h1>
@@ -55,21 +30,7 @@
 
     <div id="result"></div>
 
-    <script>
-      function convertir() {
-        var amount = parseFloat(document.getElementById("amount").value);
-        var fromCurrency = document.getElementById("from").value;
-        var toCurrency = document.getElementById("to").value;
-
-        var rate =
-          fromCurrency === "peso" && toCurrency === "dolar" ? 0.049 : 20.41; // Tasa de cambio ficticia
-
-        var result = amount * rate;
-
-        document.getElementById("result").innerHTML =
-          "Resultado: " + result.toFixed(2) + " " + toCurrency;
-      }
-    </script>
+    <script src="./converter.js"></script>
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
