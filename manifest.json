@@ -2,13 +2,13 @@
     "name": "Conversor de Monedas",
     "short_name": "Conversor",
     "description": "Una aplicación simple para convertir monedas",
-    "start_url": "/",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#4CAF50",
     "icons": [
         {
-            "src": "/icon.png",
+            "src": "./icon.png",
             "sizes": "512x512",
             "type": "image/png"
         }
