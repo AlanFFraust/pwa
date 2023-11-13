@@ -1,23 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conversor de Monedas</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 20px;
+      }
+
+      input {
+        padding: 10px;
+        margin: 10px;
+        width: 200px;
+        text-align: right;
+      }
+
+      button {
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #result {
+        font-size: 1.5em;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Conversor de Monedas</h1>
+
+    <label for="amount">Cantidad:</label>
+    <input type="number" id="amount" placeholder="Ingrese la cantidad" />
+
+    <label for="from">De:</label>
+    <select id="from">
+      <option value="peso">Peso</option>
+      <option value="dolar">Dólar</option>
+    </select>
+
+    <label for="to">A:</label>
+    <select id="to">
+      <option value="peso">Peso</option>
+      <option value="dolar">Dólar</option>
+    </select>
+
+    <button onclick="convertir()">Convertir</button>
+
+    <div id="result"></div>
+
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then((registration) => {
-                    console.log('Service Worker registrado con éxito:', registration);
-                })
-                .catch((error) => {
-                    console.error('Error al registrar el Service Worker:', error);
-                });
-        }
+      function convertir() {
+        var amount = parseFloat(document.getElementById("amount").value);
+        var fromCurrency = document.getElementById("from").value;
+        var toCurrency = document.getElementById("to").value;
+
+        var rate =
+          fromCurrency === "peso" && toCurrency === "dolar" ? 0.049 : 20.41; // Tasa de cambio ficticia
+
+        var result = amount * rate;
+
+        document.getElementById("result").innerHTML =
+          "Resultado: " + result.toFixed(2) + " " + toCurrency;
+      }
     </script>
-    
-</head>
-<body>
-    
-</body>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then(function (registration) {
+            console.log("Service Worker registrado con éxito:", registration);
+          })
+          .catch(function (error) {
+            console.log("Error al registrar el Service Worker:", error);
+          });
+      }
+    </script>   
+  </body>
 </html>

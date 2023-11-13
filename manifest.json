@@ -1,20 +1,15 @@
 {
-    "name": "Mi PWA",
-    "short_name": "PWA",
-    "description": "Una Progressive Web App simple",
+    "name": "Conversor de Monedas",
+    "short_name": "Conversor",
+    "description": "Una aplicación simple para convertir monedas",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#000000",
+    "theme_color": "#4CAF50",
     "icons": [
         {
             "src": "/icon.png",
             "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/apple-icon.png",
-            "sizes": "180x180",
             "type": "image/png"
         }
     ]
