@@ -1,20 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const app = document.getElementById('app');
-    const changeColorButton = document.createElement('button');
-    changeColorButton.textContent = 'Cambiar Color';
-    app.appendChild(changeColorButton);
+function convertir() {
+    var amount = parseFloat(document.getElementById("amount").value);
+    var fromCurrency = document.getElementById("from").value;
+    var toCurrency = document.getElementById("to").value;
 
-    changeColorButton.addEventListener('click', () => {
-        const randomColor = getRandomColor();
-        app.style.backgroundColor = randomColor;
-    });
+    var rate =
+      fromCurrency === "peso" && toCurrency === "dolar" ? 0.049 : 20.41; // Tasa de cambio ficticia
 
-    function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-});
+    var result = amount * rate;
+
+    document.getElementById("result").innerHTML =
+      "Resultado: " + result.toFixed(2) + " " + toCurrency;
+  }

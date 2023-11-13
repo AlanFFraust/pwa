@@ -1,53 +1,59 @@
 const CACHE_NAME = 'conversor-currency-v1';
-urlsToCache = [
+const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
     './icon.png',
-    './styles.css'
+    './styles.css',
+    './app.js'
 ];
 
-const NOMBRE_CACHE_DINAMICA = `memoria-cache-dinamica-v1`;
-recursos_Dinamicos = [];
+const DYNAMIC_CACHE_NAME = 'memoria-cache-dinamica-v1';
 
-
-// Utilice el evento de instalación para almacenar en caché previamente todos los recursos iniciales.
 self.addEventListener('install', event => {
-    event.waitUntil((async () => {
-        const cache1 = await caches.open(CACHE_NAME);
-        cache1.addAll(urlsToCache);
-
-        const cache2 = await caches.open(NOMBRE_CACHE_DINAMICA);
-        cache2.addAll(recursos_Dinamicos);
-    })());
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(urlsToCache))
+    );
 });
 
-
-
 self.addEventListener('fetch', event => {
-    event.respondWith((async () => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
 
-        const cache1 = await caches.open(CACHE_NAME);  //Abre cache Estatica
-        const cache2 = await caches.open(NOMBRE_CACHE_DINAMICA);  //Abre cache Dinamico
+                return fetch(event.request)
+                    .then(networkResponse => {
+                        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                            return networkResponse;
+                        }
 
+                        const clonedResponse = networkResponse.clone();
 
-        const respuesta = await cache1.match(event.request);     //Busca el recurso
-        if (respuesta) {
-            console.log("Cache Estatica: " + event.request.url);
-            return respuesta;
-        }
-        else {
-            try {
-                const respuestaRed = await fetch(event.request);
-                cache2.put(event.request, respuestaRed.clone());
-                console.log("Red: " + event.request.url + " Actualizo cache Dinamica");
-                return respuestaRed;
-            }
-            catch (e) { //Si falló la red
-                const respuesta2 = await cache2.match(event.request);
-                console.log("Dinamica: " + event.request.url);
-                return respuesta2
-            }
-        }
-    })());
+                        caches.open(DYNAMIC_CACHE_NAME)
+                            .then(cache => {
+                                cache.put(event.request, clonedResponse);
+                            });
+
+                        return networkResponse;
+                    })
+                    .catch(error => {
+                        return caches.match(event.request);
+                    });
+            })
+    );
+});
+
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.filter(cache => cache !== CACHE_NAME && cache !== DYNAMIC_CACHE_NAME)
+                    .map(cache => caches.delete(cache))
+            );
+        })
+    );
 });
