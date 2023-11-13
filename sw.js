@@ -1,6 +1,6 @@
 const CACHE_NAME = 'conversor-currency-v1';
 urlsToCache = [
-    '/',
+    './',
     './index.html',
     './manifest.json',
     './icon.png',
