@@ -66,17 +66,34 @@ self.addEventListener('message', event => {
 
 async function convertirMoneda(amount, fromCurrency, toCurrency) {
     try {
-        console.log(fromCurrency,amount,toCurrency)
-        const response = await fetch(API_URL + fromCurrency);
-        const data = await response.json();
-        console.log(data);
-        if (data.error) {
+        let data;
+
+        try {
+            const response = await fetch(`${API_URL}${fromCurrency}`);
+            data = await response.json();
+
+            // Almacena en caché la respuesta en la caché dinámica para su uso futuro
+            const dynamicCache = await caches.open(DYNAMIC_CACHE_NAME);
+            dynamicCache.put(`${API_URL}${fromCurrency}`, new Response(JSON.stringify(data)));
+        } catch (networkError) {
+            // Si falla la red, intenta obtener los datos de la caché dinámica
+            const cachedResponse = await caches.match(`${API_URL}${fromCurrency}`);
+            if (cachedResponse) {
+                data = await cachedResponse.json();
+            } else {
+                throw networkError;
+            }
+        }
+
+        if (data.result === 'error') {
             console.error('Error en la respuesta de la API:', data.error);
             return;
         }
-        console.log(data.rates);
-        const rate = data.conversion_rates[toCurrency];
-        const result = amount * rate;
+
+        console.log(data.conversion_rates);
+
+        // Llama a la función para realizar la conversión
+        const result = realizarConversion(amount, data.conversion_rates, toCurrency);
 
         // Enviar el resultado al cliente
         self.clients.matchAll().then(clients => {
