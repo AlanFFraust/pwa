@@ -41,22 +41,19 @@
     <div id="result"></div>
 
     <script>
-      // Función para realizar la conversión
       function realizarConversion() {
         var amount = parseFloat(document.getElementById("amount").value);
         var fromCurrency = document.getElementById("from").value;
         var toCurrency = document.getElementById("to").value;
 
-        // Llamada a la función del Service Worker para realizar la conversión
         convertirMoneda(amount, fromCurrency, toCurrency);
       }
 
-      // Escuchar el resultado de la conversión desde el Service Worker
       navigator.serviceWorker.addEventListener("message", (event) => {
         if (event.data && event.data.type === "conversionResult") {
           const result = event.data.result;
 
-          // Mostrar el resultado en la interfaz de usuario
+          // Mostrar el resultado
           document.getElementById("result").innerHTML =
             "Resultado: " + result + " " + document.getElementById("to").value;
         }
@@ -71,18 +68,36 @@
           });
       }
 
-      // Llamar a esta función cuando quieras realizar la conversión
       function convertirMoneda(amount, fromCurrency, toCurrency) {
-        sendMessageToServiceWorker({
-          type: "convert",
-          amount: amount,
-          fromCurrency: fromCurrency,
-          toCurrency: toCurrency,
-        });
+        if (navigator.serviceWorker.controller) {
+          sendMessageToServiceWorker({
+            type: "convert",
+            amount: amount,
+            fromCurrency: fromCurrency,
+            toCurrency: toCurrency,
+          });
+        } else {
+          console.error(
+            "Service Worker controller no disponible. Esperando..."
+          );
+          navigator.serviceWorker.ready.then(() => {
+            sendMessageToServiceWorker({
+              type: "convert",
+              amount: amount,
+              fromCurrency: fromCurrency,
+              toCurrency: toCurrency,
+            });
+          });
+        }
       }
 
+      // Función para enviar mensajes al Service Worker
       function sendMessageToServiceWorker(message) {
-        navigator.serviceWorker.controller.postMessage(message);
+        if (navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage(message);
+        } else {
+          console.error("Service Worker controller no disponible");
+        }
       }
     </script>
   </body>
