@@ -78,7 +78,7 @@ function sendMessageToServiceWorker(message) {
     console.error("Service Worker controller no disponible");
     const value = obtenerValoresPredeterminados(message.amount, message.fromCurrency, message.toCurrency);
     document.getElementById("result").innerHTML =
-      "Resultado: " + value.toFixed(4) + " " + message.toCurrency;
+      "Resultado: " + value.toFixed(2) + " " + message.toCurrency;
   }
 }
 
