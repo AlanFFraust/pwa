@@ -75,7 +75,7 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
             return;
         }
         console.log(data.rates);
-        const rate = data.rates[toCurrency];
+        const rate = data.conversion_rates[toCurrency];
         const result = amount * rate;
 
         // Enviar el resultado al cliente
