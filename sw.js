@@ -5,47 +5,13 @@ const urlsToCache = [
     './manifest.json',
     './icon.png',
     './styles.css',
-    './app.js'
+    './app.js',
+    './valores.js'
 ];
 const API_URL = 'https://v6.exchangerate-api.com/v6/47a2c19322df51ee86d4d0c4/latest/';
 const DYNAMIC_CACHE_NAME = 'memoria-cache-dinamica-v1';
-const valoresPredeterminados = {
-    MXN: {
-        USD: 0.06,
-        MXN: 1,
-        EUR: 0.05,
-        JPY: 8.60,
-        GBP: 0.05
-    },
-    USD: {
-        MXN: 16.67,
-        USD: 1,
-        EUR: 0.85,
-        JPY: 114.58,
-        GBP: 0.74
-    },
-    EUR: {
-        MXN: 20.00,
-        USD: 1.18,
-        EUR: 1,
-        JPY: 135.29,
-        GBP: 0.88
-    },
-    JPY: {
-        MXN: 0.12,
-        USD: 0.009,
-        EUR: 0.0074,
-        JPY: 1,
-        GBP: 0.0065
-    },
-    GBP: {
-        MXN: 20.00,
-        USD: 1.35,
-        EUR: 1.14,
-        JPY: 154.00,
-        GBP: 1
-    }
-};
+import valoresPredeterminados from './valores';
+
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)

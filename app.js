@@ -1,40 +1,5 @@
-const valoresPredeterminados = {
-  MXN: {
-    USD: 0.06,
-    MXN: 1,
-    EUR: 0.05,
-    JPY: 8.60,
-    GBP: 0.05
-  },
-  USD: {
-    MXN: 16.67,
-    USD: 1,
-    EUR: 0.85,
-    JPY: 114.58,
-    GBP: 0.74
-  },
-  EUR: {
-    MXN: 20.00,
-    USD: 1.18,
-    EUR: 1,
-    JPY: 135.29,
-    GBP: 0.88
-  },
-  JPY: {
-    MXN: 0.12,
-    USD: 0.009,
-    EUR: 0.0074,
-    JPY: 1,
-    GBP: 0.0065
-  },
-  GBP: {
-    MXN: 20.00,
-    USD: 1.35,
-    EUR: 1.14,
-    JPY: 154.00,
-    GBP: 1
-  }
-};
+
+import valoresPredeterminados from './valores';
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js", { scope: "./" });
