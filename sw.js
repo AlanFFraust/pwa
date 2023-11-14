@@ -68,12 +68,12 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
     try {
         const response = await fetch(API_URL);
         const data = await response.json();
-        console.log(response);
+        console.log(data);
         if (data.error) {
             console.error('Error en la respuesta de la API:', data.error);
             return;
         }
-
+        console.log(data.rates);
         const rate = data.rates[toCurrency];
         const result = amount * rate;
 
