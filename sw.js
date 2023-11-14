@@ -92,8 +92,8 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
 
         console.log(data.conversion_rates);
 
-        // Llama a la función para realizar la conversión
-        const result = realizarConversion(amount, data.conversion_rates, toCurrency);
+        const rate = data.conversion_rates[toCurrency];
+        const result = amount * rate;
 
         // Enviar el resultado al cliente
         self.clients.matchAll().then(clients => {

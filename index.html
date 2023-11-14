@@ -20,20 +20,20 @@
 
     <label for="from">De:</label>
     <select id="from">
-        <option value="MXN">Peso Méxicano</option>
-        <option value="USD">Dólar</option>
-        <option value="EUR">Euro</option>
-        <option value="JPY">Yen japonés</option>
-        <option value="GBP">Libra esterlina</option>
+      <option value="MXN">Peso Méxicano</option>
+      <option value="USD">Dólar</option>
+      <option value="EUR">Euro</option>
+      <option value="JPY">Yen japonés</option>
+      <option value="GBP">Libra esterlina</option>
     </select>
 
     <label for="to">A:</label>
     <select id="to">
-        <option value="USD">Dólar</option>
-        <option value="MXN">Peso Méxicano</option>
-        <option value="EUR">Euro</option>
-        <option value="JPY">Yen japonés</option>
-        <option value="GBP">Libra esterlina</option>
+      <option value="USD">Dólar</option>
+      <option value="MXN">Peso Méxicano</option>
+      <option value="EUR">Euro</option>
+      <option value="JPY">Yen japonés</option>
+      <option value="GBP">Libra esterlina</option>
     </select>
 
     <button onclick="realizarConversion()">Convertir</button>
@@ -66,11 +66,6 @@
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("./sw.js", { scope: "./" })
-          .then((registration) => {
-            // Agregar el código dentro del evento 'controllerchange'
-            registration.addEventListener("controllerchange", () => {
-            });
-          })
           .catch((error) => {
             console.error("Error al registrar el Service Worker:", error);
           });
@@ -78,16 +73,16 @@
 
       // Llamar a esta función cuando quieras realizar la conversión
       function convertirMoneda(amount, fromCurrency, toCurrency) {
-        if (navigator.serviceWorker.controller) {
-          navigator.serviceWorker.controller.postMessage({
-            type: "convert",
-            amount: amount,
-            fromCurrency: fromCurrency,
-            toCurrency: toCurrency,
-          });
-        } else {
-          console.error("Service Worker controller no disponible");
-        }
+        sendMessageToServiceWorker({
+          type: "convert",
+          amount: amount,
+          fromCurrency: fromCurrency,
+          toCurrency: toCurrency,
+        });
+      }
+
+      function sendMessageToServiceWorker(message) {
+        navigator.serviceWorker.controller.postMessage(message);
       }
     </script>
   </body>
