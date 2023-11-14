@@ -68,6 +68,12 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
     try {
         const response = await fetch(API_URL);
         const data = await response.json();
+        console.log(response);
+        if (data.error) {
+            console.error('Error en la respuesta de la API:', data.error);
+            return;
+        }
+
         const rate = data.rates[toCurrency];
         const result = amount * rate;
 
@@ -81,6 +87,7 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
             });
         });
     } catch (error) {
-        console.error('Error al obtener tasas de cambio:', error);
+        console.error('Error al realizar la conversión:', error);
     }
 }
+
