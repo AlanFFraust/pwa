@@ -68,10 +68,7 @@
           .register("./sw.js", { scope: "./" })
           .then((registration) => {
             // Agregar el código dentro del evento 'controllerchange'
-            registration.addEventListener("controllerchange", () => {
-              // Enviar el mensaje al Service Worker
-              convertirMoneda(100, "peso", "dolar"); // Puedes ajustar los valores iniciales según sea necesario
-            });
+            registration.addEventListener("controllerchange");
           })
           .catch((error) => {
             console.error("Error al registrar el Service Worker:", error);
