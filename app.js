@@ -44,7 +44,10 @@ function realizarConversion() {
   var amount = parseFloat(document.getElementById("amount").value);
   var fromCurrency = document.getElementById("from").value;
   var toCurrency = document.getElementById("to").value;
-
+  if (document.getElementById("amount").value.trim() === "") {
+    alert("Por favor, ingrese una cantidad válida.");
+    return; 
+  }
   convertirMoneda(amount, fromCurrency, toCurrency);
 }
 
@@ -54,7 +57,7 @@ navigator.serviceWorker.addEventListener("message", (event) => {
 
     // Mostrar el resultado
     document.getElementById("result").innerHTML =
-      "Resultado: " + result + " " + document.getElementById("to").value;
+      "Resultado: " + result.toFixed(4) + " " + document.getElementById("to").value;
   }
 });
 
@@ -75,7 +78,7 @@ function sendMessageToServiceWorker(message) {
     console.error("Service Worker controller no disponible");
     const value = obtenerValoresPredeterminados(message.amount, message.fromCurrency, message.toCurrency);
     document.getElementById("result").innerHTML =
-      "Resultado: " + value + " " + message.toCurrency;
+      "Resultado: " + value.toFixed(4) + " " + message.toCurrency;
   }
 }
 

@@ -61,27 +61,11 @@ self.addEventListener('fetch', event => {
                     return cachedResponse;
                 }
 
-                return fetch(event.request)
-                    .then(networkResponse => {
-                        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                            return networkResponse;
-                        }
-
-                        const clonedResponse = networkResponse.clone();
-
-                        caches.open(DYNAMIC_CACHE_NAME)
-                            .then(cache => {
-                                cache.put(event.request, clonedResponse);
-                            });
-
-                        return networkResponse;
-                    })
-                    .catch(error => {
-                        return caches.match(event.request);
-                    });
+                return fetchAndCache(event.request, openCache(DYNAMIC_CACHE_NAME));
             })
     );
 });
+
 
 self.addEventListener('activate', event => {
     event.waitUntil(
@@ -108,7 +92,7 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
             const response = await fetch(`${API_URL}${fromCurrency}`);
             data = await response.json();
 
-            // Almacena en caché la respuesta en la caché dinámica para su uso futuro
+            // Almacena en caché la respuesta en la caché dinámica para despues
             const dynamicCache = await caches.open(DYNAMIC_CACHE_NAME);
             dynamicCache.put(`${API_URL}${fromCurrency}`, new Response(JSON.stringify(data)));
         } catch (networkError) {
@@ -117,6 +101,7 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
             if (cachedResponse) {
                 data = await cachedResponse.json();
             } else {
+                //Si no estaan guardados en la caché, obtiene de los valores predeterminados
                 data = {
                     conversion_rates: valoresPredeterminados[fromCurrency]
                 };
@@ -133,12 +118,12 @@ async function convertirMoneda(amount, fromCurrency, toCurrency) {
         const rate = data.conversion_rates[toCurrency];
         const result = amount * rate;
 
-        // Enviar el resultado al cliente
+        // Enviar el resultado
         self.clients.matchAll().then(clients => {
             clients.forEach(client => {
                 client.postMessage({
                     type: 'conversionResult',
-                    result: result.toFixed(2)
+                    result: result.toFixed(4)
                 });
             });
         });
