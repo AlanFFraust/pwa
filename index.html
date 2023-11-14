@@ -9,32 +9,64 @@
     <title>Conversor de Monedas</title>
   </head>
   <body>
+
     <h1>Conversor de Monedas</h1>
 
     <label for="amount">Cantidad:</label>
-    <input type="number" id="amount" placeholder="Ingrese la cantidad" />
+    <input type="number" id="amount" placeholder="Ingrese la cantidad">
 
     <label for="from">De:</label>
     <select id="from">
-      <option value="peso">Peso</option>
-      <option value="dolar">Dólar</option>
+        <option value="pesos">Pesos</option>
+        <option value="dolar">Dólar</option>
     </select>
 
     <label for="to">A:</label>
     <select id="to">
-      <option value="peso">Peso</option>
-      <option value="dolar">Dólar</option>
+        <option value="pesos">Pesos</option>
+        <option value="dolar">Dólar</option>
     </select>
 
-    <button onclick="convertir()">Convertir</button>
+    <button onclick="realizarConversion()">Convertir</button>
 
     <div id="result"></div>
 
-    <script src="./app.js"></script>
     <script>
-      if('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js', { scope: './' });
-      }
+        // Función para realizar la conversión
+        function realizarConversion() {
+            var amount = parseFloat(document.getElementById('amount').value);
+            var fromCurrency = document.getElementById('from').value;
+            var toCurrency = document.getElementById('to').value;
+
+            // Llamada a la función del Service Worker para realizar la conversión
+            convertirMoneda(amount, fromCurrency, toCurrency);
+        }
+
+        // Escuchar el resultado de la conversión desde el Service Worker
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data && event.data.type === 'conversionResult') {
+                const result = event.data.result;
+
+                // Mostrar el resultado en la interfaz de usuario
+                document.getElementById('result').innerHTML = "Resultado: " + result + " " + document.getElementById('to').value;
+            }
+        });
+
+        // Llamar a esta función cuando quieras realizar la conversión
+        function convertirMoneda(amount, fromCurrency, toCurrency) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'convert',
+                amount: amount,
+                fromCurrency: fromCurrency,
+                toCurrency: toCurrency
+            });
+        }
+
+        // Registrar el Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js', { scope: './' });
+        }
     </script>
-  </body>
+
+</body>
 </html>

@@ -1,13 +1,18 @@
-function convertir() {
-    var amount = parseFloat(document.getElementById("amount").value);
-    var fromCurrency = document.getElementById("from").value;
-    var toCurrency = document.getElementById("to").value;
+// Llamar a esta función cuando quieras realizar la conversión
+function convertirMoneda(amount, fromCurrency, toCurrency) {
+  navigator.serviceWorker.controller.postMessage({
+      type: 'convert',
+      amount: amount,
+      fromCurrency: fromCurrency,
+      toCurrency: toCurrency
+  });
+}
 
-    var rate =
-      fromCurrency === "peso" && toCurrency === "dolar" ? 0.049 : 20.41; // Tasa de cambio ficticia
-
-    var result = amount * rate;
-
-    document.getElementById("result").innerHTML =
-      "Resultado: " + result.toFixed(2) + " " + toCurrency;
+// Escuchar el resultado de la conversión desde el Service Worker
+navigator.serviceWorker.addEventListener('message', event => {
+  if (event.data && event.data.type === 'conversionResult') {
+      const result = event.data.result;
+      // Hacer algo con el resultado, como mostrarlo en la interfaz de usuario
+      console.log('Resultado de la conversión:', result);
   }
+});

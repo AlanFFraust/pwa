@@ -7,7 +7,7 @@ const urlsToCache = [
     './styles.css',
     './app.js'
 ];
-
+const API_URL = 'https://open.er-api.com/v6/latest/USD';
 const DYNAMIC_CACHE_NAME = 'memoria-cache-dinamica-v1';
 
 self.addEventListener('install', event => {
@@ -57,3 +57,30 @@ self.addEventListener('activate', event => {
         })
     );
 });
+
+self.addEventListener('message', event => {
+    if (event.data && event.data.type === 'convert') {
+        convertirMoneda(event.data.amount, event.data.fromCurrency, event.data.toCurrency);
+    }
+});
+
+async function convertirMoneda(amount, fromCurrency, toCurrency) {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        const rate = data.rates[toCurrency];
+        const result = amount * rate;
+
+        // Enviar el resultado al cliente
+        self.clients.matchAll().then(clients => {
+            clients.forEach(client => {
+                client.postMessage({
+                    type: 'conversionResult',
+                    result: result.toFixed(2)
+                });
+            });
+        });
+    } catch (error) {
+        console.error('Error al obtener tasas de cambio:', error);
+    }
+}
