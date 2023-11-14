@@ -57,7 +57,7 @@ navigator.serviceWorker.addEventListener("message", (event) => {
 
     // Mostrar el resultado
     document.getElementById("result").innerHTML =
-      "Resultado: " + result.toFixed(4) + " " + document.getElementById("to").value;
+      "Resultado: " + result + " " + document.getElementById("to").value;
   }
 });
 
