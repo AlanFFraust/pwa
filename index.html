@@ -63,32 +63,31 @@
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("./sw.js", { scope: "./" })
+          .then((registration) => {
+            registration.addEventListener("updatefound", () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener("statechange", () => {
+                if (
+                  newWorker.state === "installed" &&
+                  navigator.serviceWorker.controller
+                ) {
+                  window.location.reload();
+                }
+              });
+            });
+          })
           .catch((error) => {
             console.error("Error al registrar el Service Worker:", error);
           });
       }
 
       function convertirMoneda(amount, fromCurrency, toCurrency) {
-        if (navigator.serviceWorker.controller) {
           sendMessageToServiceWorker({
             type: "convert",
             amount: amount,
             fromCurrency: fromCurrency,
             toCurrency: toCurrency,
           });
-        } else {
-          console.error(
-            "Service Worker controller no disponible. Esperando..."
-          );
-          navigator.serviceWorker.ready.then(() => {
-            sendMessageToServiceWorker({
-              type: "convert",
-              amount: amount,
-              fromCurrency: fromCurrency,
-              toCurrency: toCurrency,
-            });
-          });
-        }
       }
 
       // Función para enviar mensajes al Service Worker
