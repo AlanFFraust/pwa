@@ -7,7 +7,7 @@ const urlsToCache = [
     './styles.css',
     './app.js'
 ];
-const API_URL = 'https://open.er-api.com/v6/latest/USD';
+const API_URL = 'https://v6.exchangerate-api.com/v6/47a2c19322df51ee86d4d0c4/latest/USD';
 const DYNAMIC_CACHE_NAME = 'memoria-cache-dinamica-v1';
 
 self.addEventListener('install', event => {
